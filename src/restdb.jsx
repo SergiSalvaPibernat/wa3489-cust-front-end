@@ -1,5 +1,5 @@
 // servers must allow CORS requests for these urls to work
-const custBaseURL = 'http://localhost:4000/api/customers';
+const custBaseURL = 'http://localhost:8080/api/customers';
 const authBaseUrl = 'http://localhost:8081/account';
 
 let token = null;
@@ -7,11 +7,15 @@ let token = null;
 
 /* CUSTOMER REQUESTS */
 
-let getHeaders = (token) => {
+let getHeaders = (token) => {   
+  console.log("Getting headers with token BEFORE NEW HEADERS: " + token);
   const myHeaders = new Headers({ "Content-Type": "application/json" });
+  console.log("Getting headers with token AFTER NEW HEADERS: " + token);
+  myHeaders.append('Access-Control-Allow-Origin', '*');
   if (token != null && token !== undefined) {
-    myHeaders.append("Authorization", "Bearer " + token);
+    myHeaders.append("Authorization", "Bearer " + token)
   }
+  console.log("Headers: " + myHeaders.getHeaders);
   return myHeaders;
 }
 
@@ -23,7 +27,12 @@ export async function getAll(setCustomers) {
   };
   const fetchData = async (url) => {
     try {
+      console.log("GetHeaders:" + myInit.headers);
       const response = await fetch(url, myInit);
+      
+      console.log("Username " + response.body.customers[0].name);
+      console.log("Password " + response.body.customers[0].password);
+      console.log("Email " + response.body.customers[0].email);
       if (!response.ok) {
         throw new Error(`Error fetching data: ${response.status}`);
       }
@@ -151,7 +160,7 @@ export async function registerUser( username, password, email) {
 export function callTokenService(customer) {
   let url = authBaseUrl +"/token";
   let body = JSON.stringify(customer);
-
+  console.log("Calling token service with body: " + body);
   var myInit = {
     method: 'POST',
     body: body,
@@ -167,6 +176,7 @@ export async function getJWTToken(username, password) {
   let customer = { "name": username, password };
 
   const response = await callTokenService(customer);
+  console.log("Response: " + await response.text());
   if (!response.ok) {
     return { "status": "error", "message": "Login failed: " + response.status };
   }
