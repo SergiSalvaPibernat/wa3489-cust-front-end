@@ -136,6 +136,7 @@ export async function registerUser( username, password, email) {
     mode: 'cors'
   };
   try {
+    console.log("Registering user with body: " + body);
     const response = await fetch(url, myInit);
     if (!response.ok) {
       throw new Error(`Error registering user: ${response.status}`);

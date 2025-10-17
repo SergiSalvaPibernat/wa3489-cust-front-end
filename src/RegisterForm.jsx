@@ -14,6 +14,7 @@ export function RegisterForm(props) {
 
     const onRegisterClick = async (formData) => {     
         const response = await registerUser(formData.username, formData.password, formData.email);
+        console.log("Register response: ", response);
         navigate("/login");
     };
 
