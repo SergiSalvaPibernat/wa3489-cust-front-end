@@ -3,19 +3,14 @@ const custBaseURL = 'http://localhost:8080/api/customers';
 const authBaseUrl = 'http://localhost:8081/account';
 
 let token = null;
-
-
 /* CUSTOMER REQUESTS */
 
 let getHeaders = (token) => {   
-  console.log("Getting headers with token BEFORE NEW HEADERS: " + token);
   const myHeaders = new Headers({ "Content-Type": "application/json" });
-  console.log("Getting headers with token AFTER NEW HEADERS: " + token);
   myHeaders.append('Access-Control-Allow-Origin', '*');
   if (token != null && token !== undefined) {
     myHeaders.append("Authorization", "Bearer " + token)
   }
-  console.log("Headers: " + myHeaders.getHeaders);
   return myHeaders;
 }
 
@@ -23,16 +18,11 @@ export async function getAll(setCustomers) {
   const myInit = {
     method: 'GET',
     mode: 'cors',
-    headers: getHeaders()
+    headers: getHeaders(token)
   };
   const fetchData = async (url) => {
     try {
-      console.log("GetHeaders:" + myInit.headers);
       const response = await fetch(url, myInit);
-      
-      console.log("Username " + response.body.customers[0].name);
-      console.log("Password " + response.body.customers[0].password);
-      console.log("Email " + response.body.customers[0].email);
       if (!response.ok) {
         throw new Error(`Error fetching data: ${response.status}`);
       }
@@ -49,7 +39,7 @@ export async function deleteById(id, postopCallback) {
   const myInit = {
     method: 'DELETE',
     mode: 'cors',
-    headers: getHeaders()
+    headers: getHeaders(token)
   };
   const deleteItem = async (url) => {
     try {
@@ -70,7 +60,7 @@ export function post(customer, postopCallback) {
   const myInit = {
     method: 'POST',
     body: JSON.stringify(customer),
-    headers: getHeaders(),
+    headers: getHeaders(token),
     mode: 'cors'
   };
   const postItem = async (url) => {
@@ -91,7 +81,7 @@ export function put(customer, postopCallback) {
   const myInit = {
     method: 'PUT',
     body: JSON.stringify(customer),
-    headers: getHeaders(),
+    headers: getHeaders(token),
     mode: 'cors'
   };
   const putItem = async (url) => {
@@ -112,12 +102,12 @@ export function lookupCustomerByName(username) {
   var myInit = {
     method: 'POST',
     body: username,
-    headers: getHeaders(),
+    headers: getHeaders(token),
     mode: 'cors'
   };
   const lookupCustomer = async (url) => {
     try {
-      const response = await fetch(url, init);
+      const response = await fetch(url, myInit);
       if (!response.ok) {
         throw new Error(`Error looking up customer: ${response.status}`);
       }
@@ -142,7 +132,7 @@ export async function registerUser( username, password, email) {
   var myInit = {
     method: 'POST',
     body: body,
-    headers: getHeaders(),
+    headers: getHeaders(token),
     mode: 'cors'
   };
   try {
@@ -164,7 +154,7 @@ export function callTokenService(customer) {
   var myInit = {
     method: 'POST',
     body: body,
-    headers: getHeaders(),
+    headers: getHeaders(token),
     mode: 'cors'
   };
   let promise = fetch(url, myInit);
@@ -176,7 +166,8 @@ export async function getJWTToken(username, password) {
   let customer = { "name": username, password };
 
   const response = await callTokenService(customer);
-  console.log("Response: " + await response.text());
+  token = await response.text();
+
   if (!response.ok) {
     return { "status": "error", "message": "Login failed: " + response.status };
   }

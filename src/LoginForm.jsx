@@ -25,6 +25,7 @@ export function LoginForm(props) {
       return;
     }
     const response = await getJWTToken(credentials.username, credentials.password);
+    console.log("Token response: ", response.token);
     setStatus({ status: response.status, message: response.message, token: response.token });
     if (response.status === "error") {
     } else if (response.status === "success") {
