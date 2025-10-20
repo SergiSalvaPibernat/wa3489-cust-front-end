@@ -121,3 +121,56 @@ table#customer-add-update tbody tr td.label{
   cursor: pointer;
   font-size: 16px;
 }
+
+/* Event management specific styles */
+.event-item {
+    cursor: pointer;
+}
+
+.event-item:hover {
+    background-color: #f5f5f5;
+}
+
+.event-item.selected {
+    background-color: #d4edda;
+    font-weight: bold;
+}
+
+.registration-item {
+    cursor: pointer;
+}
+
+.registration-item:hover {
+    background-color: #f5f5f5;
+}
+
+.registration-item.selected {
+    background-color: #d4edda;
+    font-weight: bold;
+}
+
+.event-nav-buttons {
+    margin: 20px 0;
+}
+
+.event-nav-buttons button {
+    margin-right: 10px;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    background-color: #f8f9fa;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.event-nav-buttons button.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.event-nav-buttons button:hover {
+    background-color: #e9ecef;
+}
+
+.event-nav-buttons button.active:hover {
+    background-color: #0056b3;
+}
